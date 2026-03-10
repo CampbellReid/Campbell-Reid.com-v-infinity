@@ -1,0 +1,66 @@
+name: Deploy Hugo Site
+
+on:
+  push:
+    branches:
+      - master
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true  # Fetch PaperMod theme
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: 'latest'
+          extended: true
+
+      - name: Build Hugo
+        run: hugo --minify
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: infra/package-lock.json
+
+      - name: Install Infrastructure Dependencies
+        run: npm ci
+        working-directory: infra
+
+      - name: Deploy Infrastructure
+        run: npx cdk deploy --require-approval never
+        working-directory: infra
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+
+      - name: Sync S3 Content
+        run: |
+          # Get Bucket Name from CDK output
+          BUCKET_NAME=$(aws cloudformation describe-stacks --stack-name HugoSiteStack --query "Stacks[0].Outputs[?ExportName=='BucketName'].OutputValue" --output text)
+          # Note: If not using Exports, we can parse from cdk-outputs.json
+          # For simplicity, assuming the bucket is reachable or name is known.
+          aws s3 sync public/ s3://campbell-reid-content --delete
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+
+      - name: Invalidate CloudFront Cache
+        run: |
+          DIST_ID=$(aws cloudformation describe-stacks --stack-name HugoSiteStack --query "Stacks[0].Outputs[?OutputKey=='SiteDistributionId'].OutputValue" --output text)
+          aws cloudfront create-invalidation --distribution-id $DIST_ID --paths "/*"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}

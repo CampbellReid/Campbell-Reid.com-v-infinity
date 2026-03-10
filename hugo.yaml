@@ -1,0 +1,54 @@
+baseURL: "https://campbellreid.com/"
+languageCode: "en-us"
+title: "Campbell Reid"
+theme: "PaperMod"
+
+params:
+  env: production
+  title: "Campbell Reid"
+  description: "Musings, thoughts, and technical projects by Campbell Reid."
+  author: "Campbell Reid"
+  
+  defaultTheme: auto
+  disableThemeToggle: false
+  
+  ShowReadingTime: true
+  ShowShareButtons: true
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: true
+  
+  profileMode:
+    enabled: true
+    title: "Campbell Reid"
+    subtitle: "Welcome to my digital home."
+    imageUrl: "https://github.com/campbellreid.png" # Placeholder/Dynamic avatar
+    imageTitle: "Campbell Reid"
+    buttons:
+      - name: Posts
+        url: posts
+      - name: About
+        url: about
+
+  socialIcons:
+    - name: github
+      url: "https://github.com/campbellreid"
+    - name: x
+      url: "https://x.com/campbellreid"
+    - name: linkedin
+      url: "https://linkedin.com/in/campbellreid"
+
+menu:
+  main:
+    - identifier: posts
+      name: Posts
+      url: /posts/
+      weight: 10
+    - identifier: about
+      name: About
+      url: /about/
+      weight: 20
+
+minify:
+  disableXML: false
+  minifyOutput: true
