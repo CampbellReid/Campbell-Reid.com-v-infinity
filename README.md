@@ -24,7 +24,7 @@ To deploy this project via GitHub Actions, you need to create an IAM User or Rol
 
 The following IAM policy provides the necessary permissions for the CDK deployment, S3 content sync, and CloudFront invalidation.
 
-*Note: Replace `<YOUR_BUCKET_NAME>` with the bucket name defined in `infra/lib/site-stack.ts` (currently `campbell-reid-content`).*
+*Note: Replace `<YOUR_BUCKET_NAME>` with the bucket name you choose for the `BUCKET_NAME` secret.*
 
 ```json
 {
@@ -84,6 +84,7 @@ Add the following secrets to your GitHub repository under **Settings > Secrets a
 1. `AWS_ACCESS_KEY_ID`: The access key for your IAM user.
 2. `AWS_SECRET_ACCESS_KEY`: The secret key for your IAM user.
 3. `AWS_REGION`: The AWS region where you want to deploy (e.g., `us-east-1`).
+4. `BUCKET_NAME`: The globally unique name of the S3 bucket to host your site.
 
 ## Local Development
 

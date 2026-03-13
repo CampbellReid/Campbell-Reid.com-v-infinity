@@ -10,8 +10,14 @@ export class HugoSiteStack extends cdk.Stack {
     super(scope, id, props);
 
     // 1. S3 Bucket for Static Content
+    const bucketName = process.env.BUCKET_NAME;
+
+    if (!bucketName) {
+      throw new Error('BUCKET_NAME environment variable is required');
+    }
+
     const siteBucket = new s3.Bucket(this, 'SiteBucket', {
-      bucketName: 'campbell-reid-content', // Should be unique or suffixed
+      bucketName: bucketName,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
