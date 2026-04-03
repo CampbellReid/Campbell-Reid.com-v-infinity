@@ -35,11 +35,9 @@ params:
 
   socialIcons:
     - name: github
-      url: "https://github.com/campbellreid"
-    - name: x
-      url: "https://x.com/campbellreid"
+      url: "https://github.com/CampbellReid"
     - name: linkedin
-      url: "https://linkedin.com/in/campbellreid"
+      url: "https://www.linkedin.com/in/campbell-reid/"
 
 menu:
   main:
