@@ -61,7 +61,7 @@ Attach a policy to this role providing the necessary permissions for CloudFormat
 Add the following secrets to your GitHub repository under **Settings > Secrets and variables > Actions**:
 
 1. `AWS_ROLE_TO_ASSUME`: The full ARN of the IAM Role created above.
-2. `AWS_REGION`: Your target AWS region (e.g., `ap-southeast-2`).
+2. `AWS_REGION`: Your target AWS region (e.g., `ap-southeast-2`). Note: the infra default is `ap-southeast-2`.
 3. `CERTIFICATE_ARN`: The ARN of your validated ACM certificate in `us-east-1`.
 4. `SITE_BUCKET`: The name of your S3 bucket (e.g., `campbell-reid-content`).
 
